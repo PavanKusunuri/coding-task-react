@@ -4,7 +4,7 @@
 import { useState } from "react";
 
 /* Instruments */
-import { useSelector, selectCount } from "@/lib/redux";
+import { useSelector, useDispatch, selectCount, increment, decrement, incrementByAmount, incrementIfOddAsync } from "@/lib/redux";
 import styles from "./counter.module.css";
 
 export const Counter = () => {
@@ -12,15 +12,18 @@ export const Counter = () => {
 
   // Create a state named incrementAmount
 
+  const [ incrementAmount, setIncrementAmount] = useState<number>(0)
+  const dispatch = useDispatch();
   return (
     <div>
       <div className={styles.row}>
         <button
           className={styles.button}
           aria-label="Decrement value"
-          onClick={() => {
+          onClick={() => 
             // dispatch event to decrease count by 1
-          }}
+            dispatch(decrement())
+          }
         >
           -
         </button>
@@ -28,28 +31,31 @@ export const Counter = () => {
         <button
           className={styles.button}
           aria-label="Increment value"
-          onClick={() => {
+          onClick={() => 
             // dispatch event to increment count by 1
-          }}
+            dispatch(increment())
+          }
         >
           +
         </button>
       </div>
       <div className={styles.row}>
-        <input className={styles.textbox} aria-label="Set increment amount" />
+        <input className={styles.textbox} type="text" aria-label="Set increment amount" value={incrementAmount} onChange={e => setIncrementAmount(Number(e.target.value))} />
         <button
           className={styles.button}
-          onClick={() => {
+          onClick={() => 
             // dispatch event to add incrementAmount to count
-          }}
+            dispatch(incrementByAmount(Number(incrementAmount)))
+          }
         >
           Add Amount
         </button>
         <button
           className={styles.button}
-          onClick={() => {
+          onClick={() => 
             // dispatch event to add incrementAmount only if count is odd
-          }}
+            dispatch(incrementIfOddAsync(incrementAmount))
+          }
         >
           Add If Odd
         </button>
